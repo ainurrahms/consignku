@@ -1,0 +1,314 @@
+openapi: 3.0.0
+info:
+  title: CONSIGNKU-BE
+  description: This is documentation about CONSIGNKU Backend.
+  version: 1.0.
+paths:
+  /login:
+    post:
+      summary: Endpoint for login users.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    pass:
+                      type: string
+        "422": # status code
+          description: Unproccessable entity
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                    pass:
+                      type: string
+  /transactions:
+    post:
+      summary: Endpoint to create transaction.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    total_price:
+                      type: number
+                    price:
+                      type: number
+                    users_id:
+                      type: integer
+                    products_id:
+                      type: integer
+                    discount_id:
+                      type: integer
+    get:
+      summary: Endpoint to get all transaction.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    total_price:
+                      type: number
+                    price:
+                      type: number
+                    users_id:
+                      type: integer
+                    products_id:
+                      type: integer
+                    discount_id:
+                      type: integer
+  /transactions/{id}:
+    get:
+      summary: Endpoint to get one transaction.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    total_price:
+                      type: number
+                    price:
+                      type: number
+                    users_id:
+                      type: integer
+                    products_id:
+                      type: integer
+                    discount_id:
+                      type: integer
+  /users:
+    get:
+      summary: Returns a list of users.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    city:
+                      type: string
+  /users/{id}:
+    get:
+      summary: Returns detail of user.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    city:
+                      type: string
+  /products:
+    get:
+      summary: Return a list of products.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    price:
+                      type: integer
+                    description:
+                      type: string
+                    condition:
+                      type: string
+                    status:
+                      type: boolean
+                    city:
+                      type: string
+                    product_type:
+                      type: string
+                    product_merk:
+                      type: string
+                    product_code:
+                      type: string
+                    product_name:
+                      type: string
+                    product_usage:
+                      type: string
+  /products/{id}:
+    get:
+      summary: Return a one product.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    price:
+                      type: integer
+                    description:
+                      type: string
+                    condition:
+                      type: string
+                    status:
+                      type: boolean
+                    city:
+                      type: string
+                    product_type:
+                      type: string
+                    product_merk:
+                      type: string
+                    product_code:
+                      type: string
+                    product_name:
+                      type: string
+                    product_usage:
+                      type: string
+  /products/types:
+    get:
+      summary: Returns a list of products type.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    product_type:
+                      type: string
+                    product_name:
+                      type: string
+                    product_merk:
+                      type: string
+                    product_code:
+                      type: string
+  /products/types{id}:
+    get:
+      summary: Returns one product type.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    product_type:
+                      type: string
+                    product_name:
+                      type: string
+                    product_merk:
+                      type: string
+                    product_code:
+                      type: string
+  /discounts:
+    get:
+      summary: Returns a list of discounts.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                    qty:
+                      type: integer
+                    updated_at:
+                      type: string
+                    created_at:
+                      type: string
+  /discounts/{id}:
+    get:
+      summary: Returns one of discount.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    code:
+                      type: string
+                    qty:
+                      type: integer
+                    updated_at:
+                      type: string
+                    created_at:
+                      type: string
