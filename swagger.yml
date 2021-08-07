@@ -1,0 +1,1179 @@
+openapi: 3.0.0
+info:
+  title: CONSIGNKU-BE
+  description: This is documentation about CONSIGNKU Backend.
+  version: 1.0.
+
+tags:
+  - name: Auth
+    description: Authentication Api
+  - name: User
+    description: Users API
+  - name: Transaction
+    description: Transaction API
+  - name: Products
+    description: Products API
+  - name: Products Type
+    description: Products Type API
+  - name: Discounts
+    description: Discounts API
+  - name: Product Used Times
+    description: Product Used Times API
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Endpoint for login users.
+      description: Login user return token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200": # status code
+          description: A JSON array of usernames
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/JWT"
+        "422": # status code
+          description: Unproccessable entity
+  /users:
+    post:
+      tags:
+        - User
+      summary: Register users
+      description: |
+        send some data for register
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  format: email
+                  example: ainurrahms
+                password:
+                  type: string
+                  example: k!UUdja21Sxh
+                city_id:
+                  type: number
+                  example: 1
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Users"
+    get:
+      tags:
+        - User
+      summary: Returns a list of users.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Users"
+
+  /users/id:
+    get:
+      tags:
+        - User
+      summary: Returns detail of user.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    city:
+                      type: string
+    put:
+      tags:
+        - User
+      summary: Update data user
+      description: |
+        send some data for register
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                username:
+                  type: string
+                  example: ainurrahms
+                password:
+                  type: string
+                  example: k!UUdja21Sxh
+                city_id:
+                  type: number
+                  example: 1
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Users"
+    delete:
+      tags:
+        - User
+      summary: Delete user.
+      description: |
+        Send data for soft delete
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Users"
+
+  /transactions:
+    post:
+      tags:
+        - Transaction
+      summary: Endpoint to create transaction.
+      description: Optional extended description in CommonMark or HTML.
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                discount_id:
+                  type: integer
+                  example: 1
+                price:
+                  type: number
+                  example: 100000.0
+                products_id:
+                  type: integer
+                  example: 1
+                total:
+                  type: number
+                  example: 100000.0
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Transactions"
+    get:
+      tags:
+        - Transaction
+      summary: Endpoint to get all transaction.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/TransactionsUser"
+  /transactions/id:
+    get:
+      tags:
+        - Transaction
+      summary: Endpoint to get one transaction.
+      description: Optional extended description in CommonMark or HTML.
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Transactions"
+    put:
+      tags:
+        - Transaction
+      summary: Update transaction
+      description: |
+        send some data for register
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                discount_id:
+                  type: integer
+                  example: 1
+                price:
+                  type: number
+                  example: 100000.0
+                products_id:
+                  type: integer
+                  example: 1
+                total:
+                  type: number
+                  example: 100000.0
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Transactions"
+
+    delete:
+      tags:
+        - Transaction
+      summary: Delete transaction.
+      description: |
+        Send data for soft delete
+      responses:
+        200:
+          description: Delete one transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Transactions"
+
+  /products:
+    post:
+      tags:
+        - Products
+      summary: Add new products
+      description: |
+        send some data for add products
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_name:
+                  type: string
+                  example: GALAX RTX 3090 4GB
+                product_description:
+                  type: string
+                  example: Barang bagus , baru dipakai
+                product_garansi:
+                  type: string
+                  example: Garansi OFF
+                product_type_id:
+                  type: integer
+                  example: 1
+                product_used_time_id:
+                  type: integer
+                  example: 1
+                city_id:
+                  type: number
+                  example: 1
+                status:
+                  type: boolean
+                  example: true
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Products"
+    get:
+      tags:
+        - Products
+      summary: Endpoint to get all products.
+      description: Retrieve all products.
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Products"
+  /products/id:
+    get:
+      tags:
+        - Products
+      summary: Endpoint to get one products.
+      description: Retrieve one products.
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Products"
+    put:
+      tags:
+        - Products
+      summary: Update product
+      description: |
+        send some data for register
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                product_name:
+                  type: string
+                  example: GALAX RTX 3090 4GB
+                product_description:
+                  type: string
+                  example: Barang bagus , baru dipakai
+                product_garansi:
+                  type: string
+                  example: Garansi OFF
+                product_type_id:
+                  type: integer
+                  example: 1
+                product_used_time_id:
+                  type: integer
+                  example: 1
+                city_id:
+                  type: number
+                  example: 1
+                status:
+                  type: boolean
+                  example: true
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Products"
+
+    delete:
+      tags:
+        - Products
+      summary: Delete product.
+      description: |
+        Send data for soft delete
+      responses:
+        200:
+          description: Delete one product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Products"
+  /products/types:
+    post:
+      tags:
+        - Products Type
+      summary: Endpoint to create product type.
+      description: Master product type.
+      requestBody:
+        description: To add new product type
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_type:
+                  type: string
+                  example: VGA
+                product_merk:
+                  type: string
+                  example: ASUS
+                product_code:
+                  type: string
+                  example: 123879AB1
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsType"
+    get:
+      tags:
+        - Products Type
+      summary: Endpoint to get all products type.
+      description: Retrieve all products type.
+      responses:
+        200:
+          description: A list of products type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsType"
+  /products/types/id:
+    get:
+      tags:
+        - Products Type
+      summary: Endpoint to get all products type.
+      description: Retrieve all products type.
+      responses:
+        200:
+          description: A list of products type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsType"
+    put:
+      tags:
+        - Products Type
+      summary: Update product type
+      description: |
+        send some data for edit product type
+      requestBody:
+        description: Edit product type
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                product_type:
+                  type: string
+                  example: VGA
+                product_merk:
+                  type: string
+                  example: ASUS
+                product_code:
+                  type: string
+                  example: 123879AB1
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsType"
+
+    delete:
+      tags:
+        - Products Type
+      summary: Delete product type.
+      description: |
+        Send data for soft delete
+      responses:
+        200:
+          description: Delete one product type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsType"
+  /discounts:
+    post:
+      tags:
+        - Discounts
+      summary: Endpoint to create discounts.
+      description: Master discounts.
+      requestBody:
+        description: To add new discounts
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: 123AAVCX
+                dicounts_value:
+                  type: number
+                  example: 1000.0
+      responses:
+        200:
+          description: Return success of discount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Discounts"
+    get:
+      tags:
+        - Discounts
+      summary: Endpoint to get all discounts.
+      description: Retrieve all discounts.
+      responses:
+        200:
+          description: A list of discounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Discounts"
+  /discounts/id:
+    get:
+      tags:
+        - Discounts
+      summary: Endpoint to get one of discount.
+      description: Retrieve one discount.
+      responses:
+        200:
+          description: Get one discount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Discounts"
+    put:
+      tags:
+        - Discounts
+      summary: Update product type
+      description: |
+        send some data for edit product type
+      requestBody:
+        description: Edit product type
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                code:
+                  type: string
+                  example: 123AAVCX
+                dicounts_value:
+                  type: number
+                  example: 1000.0
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Discounts"
+
+    delete:
+      tags:
+        - Discounts
+      summary: Delete discounts.
+      description: |
+        Send data for soft delete
+      responses:
+        200:
+          description: Delete one discounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/Discounts"
+  /product/used:
+    post:
+      tags:
+        - Product Used Times
+      summary: Endpoint to create product used times.
+      description: Master product used time.
+      requestBody:
+        description: To add new discounts
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                used_times:
+                  type: string
+                  example: 3 Tahun
+      responses:
+        200:
+          description: Return success of product used time
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsUsedTime"
+    get:
+      tags:
+        - Product Used Times
+      summary: Endpoint to get all product used times.
+      description: Retrieve all product used times.
+      responses:
+        200:
+          description: A list of product used times
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsUsedTime"
+  /product/used/id:
+    get:
+      tags:
+        - Product Used Times
+      summary: Endpoint to get one of product used times.
+      description: Retrieve one product used times.
+      responses:
+        200:
+          description: Get one product used times
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsUsedTime"
+    put:
+      tags:
+        - Product Used Times
+      summary: Update product used times
+      description: |
+        send some data for edit product used times
+      requestBody:
+        description: Edit product used times
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                used_times:
+                  type: string
+                  example: 3 Tahun
+      responses:
+        200:
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsUsedTime"
+
+    delete:
+      tags:
+        - Product Used Times
+      summary: Delete product used times.
+      description: |
+        Send data for soft delete
+      responses:
+        200:
+          description: Delete one product used times
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/ProductsUsedTime"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Login:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: jhon@doe@gmail.com
+        password:
+          type: string
+          example: QwanjjaseuQeq
+          description: encrypted password AES
+    JWT:
+      type: object
+      required:
+        - token
+        - expire_token
+        - refresh_token
+        - expire_refresh_token
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.|eyJleHAiOjE2Mjg1MTA1NzcsImp0aSI6ImV5SmhiR2NpT2l a7C6ZcazsgjdKXR2eXOPRzBhRv99NOaDMNN2gyYDE2Y
+        expire_token:
+          type: string
+          example: 2021-08-09T12:02:57Z
+          format: date-time
+        refresh_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.|eyJleHAiOjE2Mjg1MTA1NzcsImp0aSI6ImV5SmhiR2NpT2l a7C6ZcazsgjdKXR2eXOPRzBhRv99NOaDMNN2gyYDE2Y
+        expire_refresh_token:
+          type: string
+          example: 2021-08-09T12:02:57Z
+          format: date-time
+    Transactions:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: jhondoe
+        total_price:
+          type: number
+          example: 15000000.0
+        product_name:
+          type: string
+          example: GALAX RTX 3090 4GB
+        product_type:
+          type: string
+          example: VGA
+        product_merk:
+          type: string
+          example: GALAX
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+    TransactionsUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: jhondoe
+        total_price:
+          type: number
+          example: 15000000.0
+        product_name:
+          type: string
+          example: GALAX RTX 3090 4GB
+        product_type:
+          type: string
+          example: VGA
+        product_merk:
+          type: string
+          example: GALAX
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+    Products:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        product_name:
+          type: string
+          example: GALAX RTX 3090 4GB
+        product_description:
+          type: string
+          example: Barang bagus , baru dipakai
+        product_garansi:
+          type: string
+          example: Garansi OFF
+        product_type_id:
+          type: integer
+          example: 1
+        product_used_time_id:
+          type: integer
+          example: 1
+        city_id:
+          type: integer
+          example: 1
+        status:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+    ProductsType:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        product_type:
+          type: string
+          example: VGA
+        product_merk:
+          type: string
+          example: ASUS
+        product_code:
+          type: string
+          example: 123879AB1
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+    ProductsUsedTime:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        used_times:
+          type: string
+          example: 3 Tahun
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+    Discounts:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        code:
+          type: string
+          example: 123AAVCX
+        discount_value:
+          type: number
+          example: 1000.0
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+    Users:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: jhon doe
+        email:
+          type: string
+          example: jhondoe@email.com
+        created_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2021-08-09T12:02:57Z
+security:
+  - bearerAuth: []
