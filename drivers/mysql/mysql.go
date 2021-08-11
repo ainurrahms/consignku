@@ -1,6 +1,7 @@
 package database
 
 import (
+	usersRepo "consignku/drivers/databases/users"
 	"fmt"
 	"log"
 
@@ -30,5 +31,10 @@ func (config *ConfigDB) InitialDB() *gorm.DB{
 	if err != nil {
 		log.Fatal((err))
 	}
+
+	db.AutoMigrate(
+		&usersRepo.Users{},
+	)
+
 	return db
 }
