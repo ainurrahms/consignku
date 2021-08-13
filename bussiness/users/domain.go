@@ -10,16 +10,18 @@ type Domain struct {
 	Name      string
 	Username  string
 	Password  string
-	Token			string
+	Token     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-type Usecase interface{
+type Usecase interface {
 	Register(ctx context.Context, data *Domain) error
+	Login(ctx context.Context, username, password string) (string, error)
 }
 
-type Repository interface{
+type Repository interface {
 	GetByUsername(ctx context.Context, username string) (Domain, error)
+	GetByUsernamePassword(ctx context.Context, username, password string) (Domain, error)
 	Store(ctx context.Context, data *Domain) error
 }

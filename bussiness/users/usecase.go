@@ -1,6 +1,7 @@
 package users
 
 import (
+	"consignku/app/middleware"
 	"consignku/bussiness"
 	"consignku/helper/encrypt"
 	"context"
@@ -11,11 +12,13 @@ import (
 type userUsecase struct {
 	userRepository Repository
 	contextTimeout time.Duration
+	jwtAuth        *middleware.ConfigJWT
 }
 
-func NewUserUseCase(ur Repository, timeout time.Duration) Usecase {
+func NewUserUseCase(ur Repository, jwtauth *middleware.ConfigJWT, timeout time.Duration) Usecase {
 	return &userUsecase{
 		userRepository: ur,
+		jwtAuth:        jwtauth,
 		contextTimeout: timeout,
 	}
 }
@@ -27,8 +30,8 @@ func (uc *userUsecase) Register(ctx context.Context, userDomain *Domain) error {
 	existedUser, err := uc.userRepository.GetByUsername(ctx, userDomain.Username)
 
 	if err != nil {
-		if !strings.Contains(err.Error(),"not found"){
-			return  err
+		if !strings.Contains(err.Error(), "not found") {
+			return err
 		}
 	}
 
@@ -46,6 +49,27 @@ func (uc *userUsecase) Register(ctx context.Context, userDomain *Domain) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
+}
+
+func (uc *userUsecase) Login(ctx context.Context, username, password string) (string, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	if strings.TrimSpace(username) == "" && strings.TrimSpace(password) == "" {
+		return "", bussiness.ErrUsernamePasswordNotFound
+	}
+
+	userDomain, err := uc.userRepository.GetByUsername(ctx, username)
+	if err != nil {
+		return "", err
+	}
+
+	if !encrypt.ValidateHash(password, userDomain.Password) {
+		return "", bussiness.ErrInternalServer
+	}
+
+	token := uc.jwtAuth.GenerateToken(userDomain.Id)
+	return token, nil
 }

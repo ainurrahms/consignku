@@ -11,15 +11,25 @@ type mysqlUsersRepository struct {
 	Conn *gorm.DB
 }
 
-func NewMySQLUserRepository(conn *gorm.DB) users.Repository{
+func NewMySQLUserRepository(conn *gorm.DB) users.Repository {
 	return &mysqlUsersRepository{
 		Conn: conn,
 	}
 }
 
-func (nr *mysqlUsersRepository)	GetByUsername(ctx context.Context, username string) (users.Domain, error){
+func (nr *mysqlUsersRepository) GetByUsername(ctx context.Context, username string) (users.Domain, error) {
 	rec := Users{}
 	err := nr.Conn.Where("username = ?", username).First(&rec).Error
+	if err != nil {
+		return users.Domain{}, err
+	}
+	return rec.toDomain(), nil
+}
+
+func (nr *mysqlUsersRepository) GetByUsernamePassword(ctx context.Context, username, password string) (users.Domain, error) {
+	rec := Users{}
+	err := nr.Conn.Where("username = ? AND password = ?", username, password).First(&rec).Error
+
 	if err != nil {
 		return users.Domain{}, err
 	}

@@ -10,7 +10,8 @@ type RouteLists struct {
 	UserController users.UserController
 }
 
-func 	(r *RouteLists) RouteRegister(e *echo.Echo){
-	users := e.Group("auth")
-	users.POST("/register",r.UserController.Register)
+func (r *RouteLists) RouteRegister(e *echo.Echo) {
+	users := e.Group("v1/api/auth")
+	users.POST("/register", r.UserController.Register)
+	users.POST("/login", r.UserController.Login)
 }
