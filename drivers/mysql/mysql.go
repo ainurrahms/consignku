@@ -3,6 +3,7 @@ package database
 import (
 	discountsRepo "consignku/drivers/databases/discounts"
 	productTypesRepo "consignku/drivers/databases/product_types"
+	productUsedTimesRepo "consignku/drivers/databases/product_used_times"
 	usersRepo "consignku/drivers/databases/users"
 	"fmt"
 	"log"
@@ -36,6 +37,7 @@ func (config *ConfigDB) InitialDB() *gorm.DB {
 		&usersRepo.Users{},
 		&discountsRepo.Discounts{},
 		&productTypesRepo.ProductTypes{},
+		&productUsedTimesRepo.ProductUsedTimes{},
 	)
 
 	return db
