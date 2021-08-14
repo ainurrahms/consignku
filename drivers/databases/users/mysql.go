@@ -36,13 +36,13 @@ func (nr *mysqlUsersRepository) GetByUsernamePassword(ctx context.Context, usern
 	return rec.toDomain(), nil
 }
 
-func (nr *mysqlUsersRepository) Store(ctx context.Context, userDomain *users.Domain) error {
+func (nr *mysqlUsersRepository) Store(ctx context.Context, userDomain *users.Domain) (users.Domain, error) {
 	rec := fromDomain(*userDomain)
 
 	result := nr.Conn.Create(rec)
 	if result.Error != nil {
-		return result.Error
+		return users.Domain{}, result.Error
 	}
 
-	return nil
+	return rec.toDomain(), nil
 }

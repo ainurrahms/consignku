@@ -10,6 +10,8 @@ import (
 	_userController "consignku/controller/users"
 	_userRepo "consignku/drivers/databases/users"
 
+	_indonesiaCityLocation "consignku/drivers/databases/thirdparties/indonesia_city_location"
+
 	_routes "consignku/app/routes"
 
 	_middleware "consignku/app/middleware"
@@ -48,8 +50,10 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 	e := echo.New()
 
+	indonesiaCityLocation := _indonesiaCityLocation.NewIndonesiaCityLocation()
+
 	userRepo := _userRepo.NewMySQLUserRepository(db)
-	userUsecase := _userUsecase.NewUserUseCase(userRepo, &configJWT, timeoutContext)
+	userUsecase := _userUsecase.NewUserUseCase(userRepo, &configJWT, indonesiaCityLocation, timeoutContext)
 	useCtrl := _userController.NewUserController(userUsecase)
 
 	routesInit := _routes.RouteLists{
