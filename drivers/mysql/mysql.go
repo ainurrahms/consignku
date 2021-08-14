@@ -2,6 +2,7 @@ package database
 
 import (
 	discountsRepo "consignku/drivers/databases/discounts"
+	productTypesRepo "consignku/drivers/databases/product_types"
 	usersRepo "consignku/drivers/databases/users"
 	"fmt"
 	"log"
@@ -34,6 +35,7 @@ func (config *ConfigDB) InitialDB() *gorm.DB {
 	db.AutoMigrate(
 		&usersRepo.Users{},
 		&discountsRepo.Discounts{},
+		&productTypesRepo.ProductTypes{},
 	)
 
 	return db
