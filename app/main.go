@@ -10,6 +10,10 @@ import (
 	_userController "consignku/controller/users"
 	_userRepo "consignku/drivers/databases/users"
 
+	_discountsUsecase "consignku/bussiness/discounts"
+	_discountsController "consignku/controller/discounts"
+	_discountsRepo "consignku/drivers/databases/discounts"
+
 	_routes "consignku/app/routes"
 
 	_middleware "consignku/app/middleware"
@@ -50,10 +54,16 @@ func main() {
 
 	userRepo := _userRepo.NewMySQLUserRepository(db)
 	userUsecase := _userUsecase.NewUserUseCase(userRepo, &configJWT, timeoutContext)
-	useCtrl := _userController.NewUserController(userUsecase)
+	userCtrl := _userController.NewUserController(userUsecase)
+
+	discountsRepo := _discountsRepo.NewMySQLDiscountsRepository(db)
+	discountsUsecase := _discountsUsecase.NewDiscountsUsecase(discountsRepo, &configJWT, timeoutContext)
+	dicountsCtrl := _discountsController.NewDiscountsController(discountsUsecase)
 
 	routesInit := _routes.RouteLists{
-		UserController: *useCtrl,
+		JWTMiddleware:       configJWT.Init(),
+		UserController:      *userCtrl,
+		DiscountsController: *dicountsCtrl,
 	}
 
 	routesInit.RouteRegister(e)
