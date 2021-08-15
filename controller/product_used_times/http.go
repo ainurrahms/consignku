@@ -4,6 +4,7 @@ import (
 	"consignku/bussiness/product_used_times"
 	"consignku/controller"
 	"consignku/controller/product_used_times/request"
+	"consignku/controller/product_used_times/response"
 	"errors"
 	"net/http"
 	"strconv"
@@ -53,6 +54,22 @@ func (ctrl *ProductUsedTimesController) Store(c echo.Context) error {
 	}
 
 	return controller.NewSuccessResponse(c, "Successfully inserted")
+}
+
+func (ctrl *ProductUsedTimesController) GetAll(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	resp, err := ctrl.ProductUsedTimesUseCase.GetAll(ctx)
+	if err != nil {
+		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	responseController := []response.ProductUsedTimes{}
+	for _, value := range resp {
+		responseController = append(responseController, response.FromDomain(value))
+	}
+
+	return controller.NewSuccessResponse(c, responseController)
 }
 
 func (ctrl *ProductUsedTimesController) GetByID(c echo.Context) error {
