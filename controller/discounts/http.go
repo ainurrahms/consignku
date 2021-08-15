@@ -4,6 +4,7 @@ import (
 	"consignku/bussiness/discounts"
 	"consignku/controller"
 	"consignku/controller/discounts/request"
+	"consignku/controller/discounts/response"
 	"errors"
 	"net/http"
 	"strconv"
@@ -22,22 +23,22 @@ func NewDiscountsController(uc discounts.Usecase) *DiscountsController {
 	}
 }
 
-func (ctrl *DiscountsController) Fetch(c echo.Context) error {
-	ctx := c.Request().Context()
-	page := c.QueryParam("page")
-	perpage := c.QueryParam("perpage")
+// func (ctrl *DiscountsController) Fetch(c echo.Context) error {
+// 	ctx := c.Request().Context()
+// 	page := c.QueryParam("page")
+// 	perpage := c.QueryParam("perpage")
 
-	convPage, _ := strconv.Atoi(page)
-	convPerPage, _ := strconv.Atoi(perpage)
+// 	convPage, _ := strconv.Atoi(page)
+// 	convPerPage, _ := strconv.Atoi(perpage)
 
-	res, _, err := ctrl.discountsUseCase.Fetch(ctx, convPage, convPerPage)
+// 	res, _, err := ctrl.discountsUseCase.Fetch(ctx, convPage, convPerPage)
 
-	if err != nil {
-		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
-	}
+// 	if err != nil {
+// 		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
+// 	}
 
-	return controller.NewSuccessResponse(c, res)
-}
+// 	return controller.NewSuccessResponse(c, res)
+// }
 
 func (ctrl *DiscountsController) Store(c echo.Context) error {
 	ctx := c.Request().Context()
@@ -53,6 +54,22 @@ func (ctrl *DiscountsController) Store(c echo.Context) error {
 	}
 
 	return controller.NewSuccessResponse(c, "Successfully inserted")
+}
+
+func (ctrl *DiscountsController) GetAll(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	resp, err := ctrl.discountsUseCase.GetAll(ctx)
+	if err != nil {
+		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	responseController := []response.Discounts{}
+	for _, value := range resp {
+		responseController = append(responseController, response.FromDomain(value))
+	}
+
+	return controller.NewSuccessResponse(c, responseController)
 }
 
 func (ctrl *DiscountsController) GetByID(c echo.Context) error {

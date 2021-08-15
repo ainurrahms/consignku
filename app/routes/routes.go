@@ -27,9 +27,9 @@ func (r *RouteLists) RouteRegister(e *echo.Echo) {
 
 	discounts := e.Group("v1/api/discounts")
 	//get all belum :(
-	discounts.GET("/all", r.DiscountsController.Fetch, middleware.JWTWithConfig(r.JWTMiddleware))
-
+	// discounts.GET("/all", r.DiscountsController.Fetch, middleware.JWTWithConfig(r.JWTMiddleware))
 	discounts.POST("/create", r.DiscountsController.Store, middleware.JWTWithConfig(r.JWTMiddleware))
+	discounts.GET("", r.DiscountsController.GetAll, middleware.JWTWithConfig(r.JWTMiddleware))
 	discounts.GET("/id/:id", r.DiscountsController.GetByID, middleware.JWTWithConfig(r.JWTMiddleware))
 	discounts.PUT("/update/:id", r.DiscountsController.Update, middleware.JWTWithConfig(r.JWTMiddleware))
 	discounts.DELETE("/delete/:id", r.DiscountsController.Delete, middleware.JWTWithConfig(r.JWTMiddleware))

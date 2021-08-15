@@ -17,7 +17,8 @@ type Domain struct {
 }
 
 type Usecase interface {
-	Fetch(ctx context.Context, page, perpage int) ([]Domain, int, error)
+	// Fetch(ctx context.Context, page, perpage int) ([]Domain, int, error)
+	GetAll(ctx context.Context) ([]Domain, error)
 	Store(ctx context.Context, discountsDomain *Domain) error
 	Update(ctx context.Context, discountsDomain *Domain) (*Domain, error)
 	Delete(ctx context.Context, discountsDomain *Domain) (*Domain, error)
@@ -25,7 +26,8 @@ type Usecase interface {
 }
 
 type Repository interface {
-	Fetch(ctx context.Context, page, perpage int) ([]Domain, int, error)
+	// Fetch(ctx context.Context, page, perpage int) ([]Domain, int, error)
+	Find(ctx context.Context) ([]Domain, error)
 	FindByID(id int) (Domain, error)
 	Update(ctx context.Context, discountsDomain *Domain) (Domain, error)
 	Delete(ctx context.Context, discountsDomain *Domain) (Domain, error)
