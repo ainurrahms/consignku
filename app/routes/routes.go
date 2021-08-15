@@ -39,6 +39,7 @@ func (r *RouteLists) RouteRegister(e *echo.Echo) {
 	// discounts.GET("/all", r.DiscountsController.Fetch, middleware.JWTWithConfig(r.JWTMiddleware))
 
 	productType.POST("/create", r.ProductTypesController.Store, middleware.JWTWithConfig(r.JWTMiddleware))
+	productType.GET("", r.ProductTypesController.GetAll, middleware.JWTWithConfig(r.JWTMiddleware))
 	productType.GET("/id/:id", r.ProductTypesController.GetByID, middleware.JWTWithConfig(r.JWTMiddleware))
 	productType.PUT("/update/:id", r.ProductTypesController.Update, middleware.JWTWithConfig(r.JWTMiddleware))
 	productType.DELETE("/delete/:id", r.ProductTypesController.Delete, middleware.JWTWithConfig(r.JWTMiddleware))

@@ -50,6 +50,18 @@ func (nr *mysqlProductTypesRepository) Store(ctx context.Context, userDomain *pr
 	return nil
 }
 
+func (cr *mysqlProductTypesRepository) Find(ctx context.Context) ([]product_types.Domain, error) {
+	rec := []ProductTypes{}
+
+	cr.Conn.Find(&rec)
+	productTypesDomain := []product_types.Domain{}
+	for _, value := range rec {
+		productTypesDomain = append(productTypesDomain, value.toDomain())
+	}
+
+	return productTypesDomain, nil
+}
+
 func (nr *mysqlProductTypesRepository) FindByID(id int) (product_types.Domain, error) {
 	rec := ProductTypes{}
 
