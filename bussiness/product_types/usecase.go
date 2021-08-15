@@ -51,6 +51,14 @@ func (uc *ProductTypesUsecase) Store(ctx context.Context, ProductTypesDomain *Do
 	return nil
 }
 
+func (cu *ProductTypesUsecase) GetAll(ctx context.Context) ([]Domain, error) {
+	resp, err := cu.ProductTypesRepository.Find(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return resp, nil
+}
+
 func (uc *ProductTypesUsecase) GetByID(ctx context.Context, id int) (Domain, error) {
 
 	if id <= 0 {

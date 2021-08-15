@@ -4,6 +4,7 @@ import (
 	"consignku/bussiness/product_types"
 	"consignku/controller"
 	"consignku/controller/product_types/request"
+	"consignku/controller/product_types/response"
 	"errors"
 	"net/http"
 	"strconv"
@@ -53,6 +54,22 @@ func (ctrl *ProductTypesController) Store(c echo.Context) error {
 	}
 
 	return controller.NewSuccessResponse(c, "Successfully inserted")
+}
+
+func (ctrl *ProductTypesController) GetAll(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	resp, err := ctrl.ProductTypesUseCase.GetAll(ctx)
+	if err != nil {
+		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	responseController := []response.ProductTypes{}
+	for _, value := range resp {
+		responseController = append(responseController, response.FromDomain(value))
+	}
+
+	return controller.NewSuccessResponse(c, responseController)
 }
 
 func (ctrl *ProductTypesController) GetByID(c echo.Context) error {
