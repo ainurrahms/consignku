@@ -67,6 +67,14 @@ func (uc *productsUsecase) Update(ctx context.Context, ProductTypesDomain *Domai
 	return &res, nil
 }
 
+func (cu *productsUsecase) GetAll(ctx context.Context) ([]Domain, error) {
+	resp, err := cu.productsRepository.Find(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return resp, nil
+}
+
 func (uc *productsUsecase) GetByID(ctx context.Context, id int) (Domain, error) {
 
 	if id <= 0 {
