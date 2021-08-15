@@ -4,6 +4,7 @@ import (
 	discountsRepo "consignku/drivers/databases/discounts"
 	productTypesRepo "consignku/drivers/databases/product_types"
 	productUsedTimesRepo "consignku/drivers/databases/product_used_times"
+	productsRepo "consignku/drivers/databases/products"
 	usersRepo "consignku/drivers/databases/users"
 	"fmt"
 	"log"
@@ -38,6 +39,7 @@ func (config *ConfigDB) InitialDB() *gorm.DB {
 		&discountsRepo.Discounts{},
 		&productTypesRepo.ProductTypes{},
 		&productUsedTimesRepo.ProductUsedTimes{},
+		&productsRepo.Products{},
 	)
 
 	return db

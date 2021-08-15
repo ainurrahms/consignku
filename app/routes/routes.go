@@ -4,6 +4,7 @@ import (
 	"consignku/controller/discounts"
 	"consignku/controller/product_types"
 	"consignku/controller/product_used_times"
+	"consignku/controller/products"
 	"consignku/controller/users"
 
 	"github.com/labstack/echo/v4"
@@ -14,6 +15,7 @@ type RouteLists struct {
 	JWTMiddleware              middleware.JWTConfig
 	UserController             users.UserController
 	DiscountsController        discounts.DiscountsController
+	ProductsController         products.ProductsController
 	ProductTypesController     product_types.ProductTypesController
 	ProductUsedTimesController product_used_times.ProductUsedTimesController
 }
@@ -49,5 +51,11 @@ func (r *RouteLists) RouteRegister(e *echo.Echo) {
 	productUsedTimes.GET("/id/:id", r.ProductUsedTimesController.GetByID, middleware.JWTWithConfig(r.JWTMiddleware))
 	productUsedTimes.PUT("/update/:id", r.ProductUsedTimesController.Update, middleware.JWTWithConfig(r.JWTMiddleware))
 	productUsedTimes.DELETE("/delete/:id", r.ProductUsedTimesController.Delete, middleware.JWTWithConfig(r.JWTMiddleware))
+
+	productsTimes := e.Group("v1/api/product")
+	productsTimes.POST("/create", r.ProductsController.Store, middleware.JWTWithConfig(r.JWTMiddleware))
+	productsTimes.GET("/id/:id", r.ProductsController.GetByID, middleware.JWTWithConfig(r.JWTMiddleware))
+	productsTimes.PUT("/update/:id", r.ProductsController.Update, middleware.JWTWithConfig(r.JWTMiddleware))
+	productsTimes.DELETE("/delete/:id", r.ProductsController.Delete, middleware.JWTWithConfig(r.JWTMiddleware))
 
 }
