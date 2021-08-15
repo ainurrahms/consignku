@@ -4,6 +4,7 @@ import (
 	"consignku/bussiness/products"
 	"consignku/controller"
 	"consignku/controller/products/request"
+	"consignku/controller/products/response"
 	"errors"
 	"net/http"
 	"strconv"
@@ -63,6 +64,22 @@ func (ctrl *ProductsController) Update(c echo.Context) error {
 	}
 
 	return controller.NewSuccessResponse(c, "Successfully updated")
+}
+
+func (ctrl *ProductsController) GetAll(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	resp, err := ctrl.productsUseCase.GetAll(ctx)
+	if err != nil {
+		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	responseController := []response.Products{}
+	for _, value := range resp {
+		responseController = append(responseController, response.FromDomain(value))
+	}
+
+	return controller.NewSuccessResponse(c, responseController)
 }
 
 func (ctrl *ProductsController) GetByID(c echo.Context) error {

@@ -51,6 +51,18 @@ func (nr *mysqlProductsRepository) Update(ctx context.Context, ProductTypesDomai
 
 }
 
+func (cr *mysqlProductsRepository) Find(ctx context.Context) ([]products.Domain, error) {
+	rec := []Products{}
+
+	cr.Conn.Find(&rec)
+	productUsedTimesDomain := []products.Domain{}
+	for _, value := range rec {
+		productUsedTimesDomain = append(productUsedTimesDomain, value.toDomain())
+	}
+
+	return productUsedTimesDomain, nil
+}
+
 func (nr *mysqlProductsRepository) FindByID(id int) (products.Domain, error) {
 	rec := Products{}
 
