@@ -19,25 +19,25 @@ func NewDiscountsUsecase(nr Repository, jwtauth *middleware.ConfigJWT, timeout t
 	}
 }
 
-func (nu *discountsUsecase) Fetch(ctx context.Context, page, perpage int) ([]Domain, int, error) {
-	ctx, cancel := context.WithTimeout(ctx, nu.contextTimeout)
-	defer cancel()
+// func (nu *discountsUsecase) Fetch(ctx context.Context, page, perpage int) ([]Domain, int, error) {
+// 	ctx, cancel := context.WithTimeout(ctx, nu.contextTimeout)
+// 	defer cancel()
 
-	if page <= 0 {
-		page = 1
-	}
-	if perpage <= 0 {
-		perpage = 25
-	}
+// 	if page <= 0 {
+// 		page = 1
+// 	}
+// 	if perpage <= 0 {
+// 		perpage = 25
+// 	}
 
-	res, total, err := nu.discountsRepository.Fetch(ctx, page, perpage)
-	if err != nil {
-		return []Domain{}, 0, err
-	}
+// 	res, total, err := nu.discountsRepository.Fetch(ctx, page, perpage)
+// 	if err != nil {
+// 		return []Domain{}, 0, err
+// 	}
 
-	return res, total, nil
+// 	return res, total, nil
 
-}
+// }
 
 func (uc *discountsUsecase) Store(ctx context.Context, discountsDomain *Domain) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
@@ -49,6 +49,14 @@ func (uc *discountsUsecase) Store(ctx context.Context, discountsDomain *Domain) 
 	}
 
 	return nil
+}
+
+func (cu *discountsUsecase) GetAll(ctx context.Context) ([]Domain, error) {
+	resp, err := cu.discountsRepository.Find(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return resp, nil
 }
 
 func (uc *discountsUsecase) GetByID(ctx context.Context, id int) (Domain, error) {

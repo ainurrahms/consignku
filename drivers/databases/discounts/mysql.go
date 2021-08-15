@@ -3,7 +3,6 @@ package discounts
 import (
 	"consignku/bussiness/discounts"
 	"context"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -18,28 +17,28 @@ func NewMySQLDiscountsRepository(conn *gorm.DB) discounts.Repository {
 	}
 }
 
-func (nr *mysqlDiscountsRepository) Fetch(ctx context.Context, page, perpage int) ([]discounts.Domain, int, error) {
-	rec := []Discounts{}
+// func (nr *mysqlDiscountsRepository) Fetch(ctx context.Context, page, perpage int) ([]discounts.Domain, int, error) {
+// 	rec := []Discounts{}
 
-	offset := (page - 1) * perpage
-	err := nr.Conn.Offset(offset).Limit(perpage).Find(&rec).Error
-	if err != nil {
-		return []discounts.Domain{}, 0, err
-	}
+// 	offset := (page - 1) * perpage
+// 	err := nr.Conn.Offset(offset).Limit(perpage).Find(&rec).Error
+// 	if err != nil {
+// 		return []discounts.Domain{}, 0, err
+// 	}
 
-	var totalData int64
-	err = nr.Conn.Count(&totalData).Error
-	fmt.Println(err)
-	if err != nil {
-		return []discounts.Domain{}, 0, err
-	}
+// 	var totalData int64
+// 	err = nr.Conn.Count(&totalData).Error
+// 	fmt.Println(err)
+// 	if err != nil {
+// 		return []discounts.Domain{}, 0, err
+// 	}
 
-	var domainDiscounts []discounts.Domain
-	for _, value := range rec {
-		domainDiscounts = append(domainDiscounts, value.toDomain())
-	}
-	return domainDiscounts, int(totalData), nil
-}
+// 	var domainDiscounts []discounts.Domain
+// 	for _, value := range rec {
+// 		domainDiscounts = append(domainDiscounts, value.toDomain())
+// 	}
+// 	return domainDiscounts, int(totalData), nil
+// }
 
 func (nr *mysqlDiscountsRepository) Store(ctx context.Context, userDomain *discounts.Domain) error {
 	rec := fromDomain(*userDomain)
@@ -50,6 +49,18 @@ func (nr *mysqlDiscountsRepository) Store(ctx context.Context, userDomain *disco
 	}
 
 	return nil
+}
+
+func (cr *mysqlDiscountsRepository) Find(ctx context.Context) ([]discounts.Domain, error) {
+	rec := []Discounts{}
+
+	cr.Conn.Find(&rec)
+	discoutnsDomain := []discounts.Domain{}
+	for _, value := range rec {
+		discoutnsDomain = append(discoutnsDomain, value.toDomain())
+	}
+
+	return discoutnsDomain, nil
 }
 
 func (nr *mysqlDiscountsRepository) FindByID(id int) (discounts.Domain, error) {
