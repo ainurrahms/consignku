@@ -73,3 +73,17 @@ func (uc *userUsecase) Login(ctx context.Context, username, password string) (st
 	token := uc.jwtAuth.GenerateToken(userDomain.Id)
 	return token, nil
 }
+
+func (uc *userUsecase) GetByID(ctx context.Context, id int) (Domain, error) {
+
+	if id <= 0 {
+		return Domain{}, bussiness.ErrIDNotFound
+	}
+
+	resp, err := uc.userRepository.FindByID(id)
+
+	if err != nil {
+		return Domain{}, err
+	}
+	return resp, nil
+}

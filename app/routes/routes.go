@@ -5,6 +5,7 @@ import (
 	"consignku/controller/product_types"
 	"consignku/controller/product_used_times"
 	"consignku/controller/products"
+	"consignku/controller/transactions"
 	"consignku/controller/users"
 
 	"github.com/labstack/echo/v4"
@@ -18,6 +19,7 @@ type RouteLists struct {
 	ProductsController         products.ProductsController
 	ProductTypesController     product_types.ProductTypesController
 	ProductUsedTimesController product_used_times.ProductUsedTimesController
+	TransactionsController     transactions.TransactionsController
 }
 
 func (r *RouteLists) RouteRegister(e *echo.Echo) {
@@ -60,5 +62,8 @@ func (r *RouteLists) RouteRegister(e *echo.Echo) {
 	productsTimes.GET("/id/:id", r.ProductsController.GetByID, middleware.JWTWithConfig(r.JWTMiddleware))
 	productsTimes.PUT("/update/:id", r.ProductsController.Update, middleware.JWTWithConfig(r.JWTMiddleware))
 	productsTimes.DELETE("/delete/:id", r.ProductsController.Delete, middleware.JWTWithConfig(r.JWTMiddleware))
+
+	transactionsTimes := e.Group("v1/api/transactions")
+	transactionsTimes.POST("/create", r.TransactionsController.Store, middleware.JWTWithConfig(r.JWTMiddleware))
 
 }
