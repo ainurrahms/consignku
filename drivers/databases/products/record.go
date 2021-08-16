@@ -2,19 +2,23 @@ package products
 
 import (
 	ProductsUsecase "consignku/bussiness/products"
+	"consignku/drivers/databases/product_types"
+	"consignku/drivers/databases/product_used_times"
 	"time"
 
 	"gorm.io/gorm"
 )
 
 type Products struct {
-	Id                  int
+	ID                  int
 	Name                string
 	Price               int
 	Descriptions        string
 	Status              bool
 	ProductsTypeID      int
+	ProductsTypes       product_types.ProductTypes `gorm:"foreignKey:ProductsTypeID;references:Id"`
 	ProductsUsedTimesID int
+	ProductsUsedTimes   product_used_times.ProductUsedTimes `gorm:"foreignKey:ProductsUsedTimesID;references:Id"`
 	Garansi             bool
 	CreatedAt           time.Time
 	UpdatedAt           time.Time
@@ -23,13 +27,13 @@ type Products struct {
 
 func fromDomain(domain ProductsUsecase.Domain) *Products {
 	return &Products{
-		Id:                  domain.Id,
+		ID:                  domain.ID,
 		Name:                domain.Name,
 		Price:               domain.Price,
 		Descriptions:        domain.Descriptions,
 		Status:              domain.Status,
 		ProductsTypeID:      domain.ProductsTypeID,
-		ProductsUsedTimesID: domain.ProductsTypeID,
+		ProductsUsedTimesID: domain.ProductsUsedTimesID,
 		Garansi:             domain.Garansi,
 		CreatedAt:           domain.CreatedAt,
 		UpdatedAt:           domain.UpdatedAt,
@@ -39,13 +43,13 @@ func fromDomain(domain ProductsUsecase.Domain) *Products {
 
 func (rec *Products) toDomain() ProductsUsecase.Domain {
 	return ProductsUsecase.Domain{
-		Id:                  rec.Id,
+		ID:                  rec.ID,
 		Name:                rec.Name,
 		Price:               rec.Price,
 		Descriptions:        rec.Descriptions,
 		Status:              rec.Status,
 		ProductsTypeID:      rec.ProductsTypeID,
-		ProductsUsedTimesID: rec.ProductsTypeID,
+		ProductsUsedTimesID: rec.ProductsUsedTimesID,
 		Garansi:             rec.Garansi,
 		CreatedAt:           rec.CreatedAt,
 		UpdatedAt:           rec.UpdatedAt,
