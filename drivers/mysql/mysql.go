@@ -5,6 +5,7 @@ import (
 	productTypesRepo "consignku/drivers/databases/product_types"
 	productUsedTimesRepo "consignku/drivers/databases/product_used_times"
 	productsRepo "consignku/drivers/databases/products"
+	transactionsRepo "consignku/drivers/databases/transactions"
 	usersRepo "consignku/drivers/databases/users"
 	"fmt"
 	"log"
@@ -34,13 +35,19 @@ func (config *ConfigDB) InitialDB() *gorm.DB {
 		log.Fatal((err))
 	}
 
+	Migrate(db)
+
+	return db
+}
+
+func Migrate(db *gorm.DB) {
+
 	db.AutoMigrate(
 		&usersRepo.Users{},
 		&discountsRepo.Discounts{},
 		&productTypesRepo.ProductTypes{},
 		&productUsedTimesRepo.ProductUsedTimes{},
 		&productsRepo.Products{},
+		&transactionsRepo.Transactions{},
 	)
-
-	return db
 }

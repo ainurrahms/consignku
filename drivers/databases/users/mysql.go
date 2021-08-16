@@ -46,3 +46,12 @@ func (nr *mysqlUsersRepository) Store(ctx context.Context, userDomain *users.Dom
 
 	return nil
 }
+
+func (nr *mysqlUsersRepository) FindByID(id int) (users.Domain, error) {
+	rec := Users{}
+
+	if err := nr.Conn.Where("id = ?", id).First(&rec).Error; err != nil {
+		return users.Domain{}, err
+	}
+	return rec.toDomain(), nil
+}

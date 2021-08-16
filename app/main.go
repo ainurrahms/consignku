@@ -26,6 +26,10 @@ import (
 	_productsController "consignku/controller/products"
 	_productsRepo "consignku/drivers/databases/products"
 
+	_transactionsUsecase "consignku/bussiness/transactions"
+	_transactionsController "consignku/controller/transactions"
+	_transactionsRepo "consignku/drivers/databases/transactions"
+
 	_routes "consignku/app/routes"
 
 	_middleware "consignku/app/middleware"
@@ -84,6 +88,10 @@ func main() {
 	productsUsecase := _productsUsecase.NewProductsUsecase(productsRepo, productTypesUsecase, productUsedTimesUsecase, &configJWT, timeoutContext)
 	productsCtrl := _productsController.NewProductsController(productsUsecase)
 
+	transactionsRepo := _transactionsRepo.NewMysqlProductsRepository(db)
+	transcationsUsecase := _transactionsUsecase.NewTransactionsUsecase(transactionsRepo, userUsecase, discountsUsecase, &configJWT, timeoutContext)
+	transcationsCtrl := _transactionsController.NewTransactionsController(transcationsUsecase)
+
 	routesInit := _routes.RouteLists{
 		JWTMiddleware:              configJWT.Init(),
 		UserController:             *userCtrl,
@@ -91,6 +99,7 @@ func main() {
 		ProductTypesController:     *productTypesCtrl,
 		ProductUsedTimesController: *productUsedTimesCtrl,
 		ProductsController:         *productsCtrl,
+		TransactionsController:     *transcationsCtrl,
 	}
 
 	routesInit.RouteRegister(e)
