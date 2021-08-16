@@ -10,7 +10,7 @@ import (
 )
 
 type Transactions struct {
-	Id          int
+	ID          int
 	Price       int
 	UsersID     int
 	Users       users.Users `gorm:"foreignKey:UsersID;references:ID"`
@@ -23,7 +23,7 @@ type Transactions struct {
 
 func fromDomain(domain TransactionsUsecase.Domain) *Transactions {
 	return &Transactions{
-		Id:          domain.Id,
+		ID:          domain.ID,
 		Price:       domain.Price,
 		UsersID:     domain.UsersID,
 		DiscountsID: domain.DiscountsID,
@@ -34,7 +34,7 @@ func fromDomain(domain TransactionsUsecase.Domain) *Transactions {
 }
 func (rec *Transactions) toDomain() TransactionsUsecase.Domain {
 	return TransactionsUsecase.Domain{
-		Id:           rec.Id,
+		ID:           rec.ID,
 		Price:        rec.Price,
 		UsersID:      rec.UsersID,
 		Usernames:    rec.Users.Username,

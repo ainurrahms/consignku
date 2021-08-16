@@ -2,18 +2,21 @@ package response
 
 import (
 	"consignku/bussiness/transactions"
-	"consignku/drivers/databases/discounts"
-	"consignku/drivers/databases/users"
 )
 
 type Transactions struct {
-	Price          int                 `json:"price"`
-	UsersID        int                 `json:"users_id"`
-	Username       users.Users         `json:"username"`
-	Usernames      string              `json:"buyer_name"`
-	DiscountsID    int                 `json:"discounts_id"`
-	DiscountsVal   int                 `json:"discounts_val"`
-	DiscountsValue discounts.Discounts `json:"discounts_value"`
+	Price        int    `json:"price"`
+	UsersID      int    `json:"users_id"`
+	Usernames    string `json:"buyer_name"`
+	DiscountsID  int    `json:"discounts_id"`
+	DiscountsVal int    `json:"discounts_val"`
+}
+
+type Pagination struct {
+	CurrentPage int `json:"current_page"`
+	LastPage    int `json:"last_page"`
+	Total       int `json:"total"`
+	PerPage     int `json:"per_page"`
 }
 
 func FromDomain(domain transactions.Domain) Transactions {

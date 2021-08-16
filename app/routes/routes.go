@@ -65,5 +65,9 @@ func (r *RouteLists) RouteRegister(e *echo.Echo) {
 
 	transactionsTimes := e.Group("v1/api/transactions")
 	transactionsTimes.POST("/create", r.TransactionsController.Store, middleware.JWTWithConfig(r.JWTMiddleware))
-
+	transactionsTimes.GET("", r.TransactionsController.Find, middleware.JWTWithConfig(r.JWTMiddleware))
+	transactionsTimes.GET("/all", r.TransactionsController.GetAll, middleware.JWTWithConfig(r.JWTMiddleware))
+	transactionsTimes.GET("/id/:id", r.TransactionsController.GetByID, middleware.JWTWithConfig(r.JWTMiddleware))
+	transactionsTimes.PUT("/update/:id", r.TransactionsController.Update, middleware.JWTWithConfig(r.JWTMiddleware))
+	transactionsTimes.DELETE("/delete/:id", r.TransactionsController.Delete, middleware.JWTWithConfig(r.JWTMiddleware))
 }

@@ -12,7 +12,8 @@ type BaseResponse struct {
 		Message  string   `json:"message"`
 		Messages []string `json:"messages,omitempty"`
 	} `json:"meta"`
-	Data interface{} `json:"data"`
+	Data       interface{} `json:"data"`
+	Pagination interface{} `json:"pagination"`
 }
 
 func NewSuccessResponse(c echo.Context, param interface{}) error {
@@ -20,6 +21,16 @@ func NewSuccessResponse(c echo.Context, param interface{}) error {
 	response.Meta.Status = http.StatusOK
 	response.Meta.Message = "Success"
 	response.Data = param
+
+	return c.JSON(http.StatusOK, response)
+}
+
+func NewSuccessPaginationResponse(c echo.Context, param interface{}, pagination interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Success"
+	response.Data = param
+	response.Pagination = pagination
 
 	return c.JSON(http.StatusOK, response)
 }
