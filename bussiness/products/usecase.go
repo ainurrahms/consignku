@@ -29,12 +29,12 @@ func (uc *productsUsecase) Store(ctx context.Context, ProductTypesDomain *Domain
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductsTypeID)
+	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductTypesID)
 	if err != nil {
 		return Domain{}, bussiness.ErrProductsTypeIDNotFound
 	}
 
-	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductsUsedTimesID)
+	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductUsedTimesID)
 	if errs != nil {
 		return Domain{}, bussiness.ErrProductsUsedTimesIDNotFound
 	}
@@ -73,12 +73,12 @@ func (uc *productsUsecase) Find(ctx context.Context, page, perpage int) ([]Domai
 }
 
 func (uc *productsUsecase) Update(ctx context.Context, ProductTypesDomain *Domain) (*Domain, error) {
-	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductsTypeID)
+	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductTypesID)
 	if err != nil {
 		return &Domain{}, bussiness.ErrProductsTypeIDNotFound
 	}
 
-	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductsUsedTimesID)
+	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductUsedTimesID)
 	if errs != nil {
 		return &Domain{}, bussiness.ErrProductsUsedTimesIDNotFound
 	}

@@ -8,21 +8,21 @@ import (
 )
 
 type Domain struct {
-	ID                  int
-	Name                string
-	Price               int
-	Descriptions        string
-	Status              bool
-	ProductsTypeID      int
-	ProductsUsedTimesID int
-	ProductType         string
-	ProductMerk         string
-	ProductCode         string
-	ProductsUsedTimes   string
-	Garansi             bool
-	CreatedAt           time.Time
-	UpdatedAt           time.Time
-	DeletedAt           gorm.DeletedAt
+	ID                 int
+	Name               string
+	Price              int
+	Descriptions       string
+	Status             bool
+	ProductTypesID     int
+	ProductUsedTimesID int
+	ProductType        string
+	ProductMerk        string
+	ProductCode        string
+	ProductsUsedTimes  string
+	Garansi            bool
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
+	DeletedAt          gorm.DeletedAt
 }
 
 type Usecase interface {

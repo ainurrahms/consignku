@@ -89,7 +89,7 @@ func (cr *mysqlProductsRepository) FindAll(ctx context.Context) ([]products.Doma
 func (nr *mysqlProductsRepository) FindByID(id int) (products.Domain, error) {
 	rec := Products{}
 
-	if err := nr.Conn.Joins("ProductTypes").Joins("ProductUsedTimes").Where("id = ?", id).First(&rec).Error; err != nil {
+	if err := nr.Conn.Joins("ProductTypes").Joins("ProductUsedTimes").Where("products.id = ?", id).First(&rec).Error; err != nil {
 		return products.Domain{}, err
 	}
 	return rec.toDomain(), nil
