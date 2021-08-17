@@ -81,13 +81,13 @@ func (ctrl *ProductTypesController) GetByID(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	discounts, err := ctrl.ProductTypesUseCase.GetByID(ctx, id)
+	productTypes, err := ctrl.ProductTypesUseCase.GetByID(ctx, id)
 
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	return controller.NewSuccessResponse(c, discounts)
+	return controller.NewSuccessResponse(c, response.FromDomain(productTypes))
 }
 
 func (ctrl *ProductTypesController) Update(c echo.Context) error {
