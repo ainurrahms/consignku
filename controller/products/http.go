@@ -91,13 +91,13 @@ func (ctrl *ProductsController) GetByID(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	discounts, err := ctrl.productsUseCase.GetByID(ctx, id)
+	products, err := ctrl.productsUseCase.GetByID(ctx, id)
 
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	return controller.NewSuccessResponse(c, discounts)
+	return controller.NewSuccessResponse(c, response.FromDomain(products))
 }
 
 func (ctrl *ProductsController) Delete(c echo.Context) error {
