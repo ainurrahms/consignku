@@ -29,12 +29,12 @@ func (uc *productsUsecase) Store(ctx context.Context, ProductTypesDomain *Domain
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductsTypeID)
+	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductTypesID)
 	if err != nil {
 		return Domain{}, bussiness.ErrProductsTypeIDNotFound
 	}
 
-	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductsUsedTimesID)
+	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductUsedTimesID)
 	if errs != nil {
 		return Domain{}, bussiness.ErrProductsUsedTimesIDNotFound
 	}
@@ -48,13 +48,37 @@ func (uc *productsUsecase) Store(ctx context.Context, ProductTypesDomain *Domain
 
 }
 
+func (uc *productsUsecase) Find(ctx context.Context, page, perpage int) ([]Domain, int, int, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	if page <= 0 {
+		page = 1
+	}
+	if perpage <= 0 {
+		perpage = 10
+	}
+	res, count, err := uc.productsRepository.Find(ctx, page, perpage)
+
+	lastPage := count / perpage
+
+	if count%perpage > 0 {
+		lastPage += 1
+	}
+
+	if err != nil {
+		return []Domain{}, 0, 1, err
+	}
+	return res, count, lastPage, nil
+}
+
 func (uc *productsUsecase) Update(ctx context.Context, ProductTypesDomain *Domain) (*Domain, error) {
-	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductsTypeID)
+	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductTypesID)
 	if err != nil {
 		return &Domain{}, bussiness.ErrProductsTypeIDNotFound
 	}
 
-	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductsUsedTimesID)
+	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductUsedTimesID)
 	if errs != nil {
 		return &Domain{}, bussiness.ErrProductsUsedTimesIDNotFound
 	}
@@ -68,7 +92,7 @@ func (uc *productsUsecase) Update(ctx context.Context, ProductTypesDomain *Domai
 }
 
 func (cu *productsUsecase) GetAll(ctx context.Context) ([]Domain, error) {
-	resp, err := cu.productsRepository.Find(ctx)
+	resp, err := cu.productsRepository.FindAll(ctx)
 	if err != nil {
 		return []Domain{}, err
 	}

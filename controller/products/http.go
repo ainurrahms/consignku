@@ -55,7 +55,7 @@ func (ctrl *ProductsController) Update(c echo.Context) error {
 
 	domainReq := req.ToDomain()
 	idInt, _ := strconv.Atoi(id)
-	domainReq.Id = idInt
+	domainReq.ID = idInt
 
 	_, err := ctrl.productsUseCase.Update(ctx, domainReq)
 
@@ -116,7 +116,7 @@ func (ctrl *ProductsController) Delete(c echo.Context) error {
 
 	domainReq := req.ToDomain()
 	idInt, _ := strconv.Atoi(id)
-	domainReq.Id = idInt
+	domainReq.ID = idInt
 
 	_, err := ctrl.productsUseCase.Delete(ctx, domainReq)
 

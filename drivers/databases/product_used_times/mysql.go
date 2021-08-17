@@ -18,7 +18,7 @@ func NewMySQLProductUsedTimesRepository(conn *gorm.DB) product_used_times.Reposi
 }
 
 // func (nr *mysqlProductUsedTimesRepository) Fetch(ctx context.Context, page, perpage int) ([]product_types.Domain, int, error) {
-// 	rec := []ProductTypes{}
+// 	rec := []ProductUsedTimes{}
 
 // 	offset := (page - 1) * perpage
 // 	err := nr.Conn.Offset(offset).Limit(perpage).Find(&rec).Error
@@ -32,11 +32,11 @@ func NewMySQLProductUsedTimesRepository(conn *gorm.DB) product_used_times.Reposi
 // 		return []product_types.Domain{}, 0, err
 // 	}
 
-// 	var domainProductTypes []product_types.Domain
+// 	var domainProductUsedTimes []product_types.Domain
 // 	for _, value := range rec {
-// 		domainProductTypes = append(domainProductTypes, value.toDomain())
+// 		domainProductUsedTimes = append(domainProductUsedTimes, value.toDomain())
 // 	}
-// 	return domainProductTypes, int(totalData), nil
+// 	return domainProductUsedTimes, int(totalData), nil
 // }
 
 func (nr *mysqlProductUsedTimesRepository) Store(ctx context.Context, userDomain *product_used_times.Domain) error {
@@ -80,7 +80,7 @@ func (nr *mysqlProductUsedTimesRepository) Update(ctx context.Context, ProductUs
 		return product_used_times.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("ProductTypes").First(&rec, rec.Id).Error
+	err := nr.Conn.Preload("ProductUsedTimes").First(&rec, rec.Id).Error
 
 	if err != nil {
 		return product_used_times.Domain{}, result.Error
@@ -97,7 +97,7 @@ func (nr *mysqlProductUsedTimesRepository) Delete(ctx context.Context, ProductUs
 		return product_used_times.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("ProductTypes").First(&rec, rec.Id).Error
+	err := nr.Conn.Preload("ProductUsedTimes").First(&rec, rec.Id).Error
 
 	if err != nil {
 		return product_used_times.Domain{}, result.Error
