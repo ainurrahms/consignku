@@ -99,13 +99,13 @@ func (ctrl *TransactionsController) GetByID(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	discounts, err := ctrl.transactionsUsecase.GetByID(ctx, id)
+	transactions, err := ctrl.transactionsUsecase.GetByID(ctx, id)
 
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	return controller.NewSuccessResponse(c, discounts)
+	return controller.NewSuccessResponse(c, response.FromDomain(transactions))
 }
 
 func (ctrl *TransactionsController) Update(c echo.Context) error {

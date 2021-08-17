@@ -77,7 +77,7 @@ func (nr *mysqlProductsRepository) Find(ctx context.Context, page, perpage int) 
 func (cr *mysqlProductsRepository) FindAll(ctx context.Context) ([]products.Domain, error) {
 	rec := []Products{}
 
-	cr.Conn.Find(&rec)
+	cr.Conn.Joins("ProductTypes").Joins("ProductUsedTimes").Find(&rec)
 	productUsedTimesDomain := []products.Domain{}
 	for _, value := range rec {
 		productUsedTimesDomain = append(productUsedTimesDomain, value.toDomain())
