@@ -87,7 +87,7 @@ func (ctrl *DiscountsController) GetByID(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	return controller.NewSuccessResponse(c, discounts)
+	return controller.NewSuccessResponse(c, response.FromDomain(discounts))
 }
 
 func (ctrl *DiscountsController) Update(c echo.Context) error {
