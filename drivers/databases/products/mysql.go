@@ -25,7 +25,7 @@ func (nr *mysqlProductsRepository) Store(ctx context.Context, productsDomain *pr
 		return products.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("Products").First(&rec, rec.Id).Error
+	err := nr.Conn.Preload("Products").First(&rec, rec.ID).Error
 	if err != nil {
 		return products.Domain{}, result.Error
 	}
@@ -42,7 +42,7 @@ func (nr *mysqlProductsRepository) Update(ctx context.Context, ProductTypesDomai
 		return products.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("Products").First(&rec, rec.Id).Error
+	err := nr.Conn.Preload("Products").First(&rec, rec.ID).Error
 
 	if err != nil {
 		return products.Domain{}, result.Error
@@ -51,7 +51,30 @@ func (nr *mysqlProductsRepository) Update(ctx context.Context, ProductTypesDomai
 
 }
 
-func (cr *mysqlProductsRepository) Find(ctx context.Context) ([]products.Domain, error) {
+func (nr *mysqlProductsRepository) Find(ctx context.Context, page, perpage int) ([]products.Domain, int, error) {
+	rec := []Products{}
+	offset := (page - 1) * perpage
+
+	err := nr.Conn.Joins("ProductUsedTimes").Joins("ProductTypes").Find(&rec).Offset(offset).Limit(perpage).Error
+
+	if err != nil {
+		return []products.Domain{}, 0, err
+	}
+	count := nr.Conn.Joins("ProductUsedTimes").Joins("ProductTypes").Find(&rec).Offset(offset).Limit(perpage).RowsAffected
+
+	if err != nil {
+		return []products.Domain{}, 0, err
+	}
+
+	var res []products.Domain
+	for _, value := range rec {
+		res = append(res, value.toDomain())
+	}
+
+	return res, int(count), nil
+}
+
+func (cr *mysqlProductsRepository) FindAll(ctx context.Context) ([]products.Domain, error) {
 	rec := []Products{}
 
 	cr.Conn.Find(&rec)
@@ -66,7 +89,7 @@ func (cr *mysqlProductsRepository) Find(ctx context.Context) ([]products.Domain,
 func (nr *mysqlProductsRepository) FindByID(id int) (products.Domain, error) {
 	rec := Products{}
 
-	if err := nr.Conn.Where("id = ?", id).First(&rec).Error; err != nil {
+	if err := nr.Conn.Joins("ProductTypes").Joins("ProductUsedTimes").Where("products.id = ?", id).First(&rec).Error; err != nil {
 		return products.Domain{}, err
 	}
 	return rec.toDomain(), nil
@@ -81,7 +104,7 @@ func (nr *mysqlProductsRepository) Delete(ctx context.Context, ProductUsedTimes 
 		return products.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("Products").First(&rec, rec.Id).Error
+	err := nr.Conn.Preload("Products").First(&rec, rec.ID).Error
 
 	if err != nil {
 		return products.Domain{}, result.Error
