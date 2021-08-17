@@ -34,6 +34,7 @@ func FromDomain(domain products.Domain) Products {
 		Status:             domain.Status,
 		ProductTypesID:     domain.ProductTypesID,
 		ProductType:        domain.ProductType,
+		ProductMerk:        domain.ProductMerk,
 		ProductCode:        domain.ProductCode,
 		ProductUsedTimesID: domain.ProductUsedTimesID,
 		ProductsUsedTimes:  domain.ProductsUsedTimes,
