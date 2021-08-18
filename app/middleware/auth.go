@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	echo "github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -35,4 +36,10 @@ func (jwtConf *ConfigJWT) GenerateToken(userID int) string {
 	token, _ := t.SignedString([]byte(jwtConf.SecretJWT))
 
 	return token
+}
+
+func GetUser(c echo.Context) *JwtCustomClaims {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*JwtCustomClaims)
+	return claims
 }
