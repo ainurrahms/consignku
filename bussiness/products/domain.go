@@ -20,6 +20,7 @@ type Domain struct {
 	ProductCode        string
 	ProductsUsedTimes  string
 	Garansi            bool
+	IDCity             int
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 	DeletedAt          gorm.DeletedAt

@@ -41,6 +41,7 @@ func (uc *userUsecase) Register(ctx context.Context, userDomain *Domain) (Domain
 	}
 
 	id, err := uc.IndonesiaCityLocation.GetCityLocation(ctx, userDomain.IDCity)
+
 	if err != nil {
 		log.Default().Printf("%+v", err)
 	}
