@@ -20,10 +20,12 @@ type Domain struct {
 type Usecase interface {
 	Register(ctx context.Context, data *Domain) (Domain, error)
 	Login(ctx context.Context, username, password string) (string, error)
+	GetByID(ctx context.Context, id int) (Domain, error)
 }
 
 type Repository interface {
 	GetByUsername(ctx context.Context, username string) (Domain, error)
+	FindByID(id int) (Domain, error)
 	GetByUsernamePassword(ctx context.Context, username, password string) (Domain, error)
 	Store(ctx context.Context, data *Domain) (Domain, error)
 }
