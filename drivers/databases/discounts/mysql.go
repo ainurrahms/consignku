@@ -81,7 +81,7 @@ func (nr *mysqlDiscountsRepository) Update(ctx context.Context, discountsDomain 
 		return discounts.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("Discounts").First(&rec, rec.Id).Error
+	err := nr.Conn.Preload("Discounts").First(&rec, rec.ID).Error
 
 	if err != nil {
 		return discounts.Domain{}, result.Error
@@ -98,7 +98,7 @@ func (nr *mysqlDiscountsRepository) Delete(ctx context.Context, discountsDomain 
 		return discounts.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("Discounts").First(&rec, rec.Id).Error
+	err := nr.Conn.Preload("Discounts").First(&rec, rec.ID).Error
 
 	if err != nil {
 		return discounts.Domain{}, result.Error

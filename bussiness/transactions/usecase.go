@@ -4,6 +4,7 @@ import (
 	"consignku/app/middleware"
 	"consignku/bussiness"
 	"consignku/bussiness/discounts"
+	"consignku/bussiness/products"
 	"consignku/bussiness/users"
 	"context"
 	"time"
@@ -12,11 +13,12 @@ import (
 type transactionsUsecase struct {
 	transactionsRepository Repository
 	usersUsecase           users.Usecase
+	productsUsecase        products.Usecase
 	discountsUsecase       discounts.Usecase
 	contextTimeout         time.Duration
 }
 
-func NewTransactionsUsecase(nr Repository, usc users.Usecase, dc discounts.Usecase, jwtauth *middleware.ConfigJWT, timeout time.Duration) Usecase {
+func NewTransactionsUsecase(nr Repository, usc users.Usecase, dc discounts.Usecase, pu products.Usecase, jwtauth *middleware.ConfigJWT, timeout time.Duration) Usecase {
 	return &transactionsUsecase{
 		transactionsRepository: nr,
 		usersUsecase:           usc,
@@ -58,11 +60,6 @@ func (uc *transactionsUsecase) Store(ctx context.Context, TransactionsDomain *Do
 		return Domain{}, bussiness.ErrProductsTypeIDNotFound
 	}
 
-	_, errs := uc.discountsUsecase.GetByID(ctx, TransactionsDomain.DiscountsID)
-	if errs != nil {
-		return Domain{}, bussiness.ErrProductsTypeIDNotFound
-	}
-
 	result, err := uc.transactionsRepository.Store(ctx, TransactionsDomain)
 	if err != nil {
 		return Domain{}, err
@@ -79,12 +76,12 @@ func (cu *transactionsUsecase) GetAll(ctx context.Context) ([]Domain, error) {
 	return resp, nil
 }
 
-func (uc *transactionsUsecase) GetByID(ctx context.Context, id int) (Domain, error) {
+func (uc *transactionsUsecase) GetByID(ctx context.Context, id, userID int) (Domain, error) {
 	if id <= 0 {
 		return Domain{}, bussiness.ErrIDNotFound
 	}
 
-	resp, err := uc.transactionsRepository.FindByID(id)
+	resp, err := uc.transactionsRepository.FindByID(id, userID)
 
 	if err != nil {
 		return Domain{}, err
@@ -96,11 +93,6 @@ func (uc *transactionsUsecase) Update(ctx context.Context, TransactionsDomain *D
 	_, err := uc.usersUsecase.GetByID(ctx, TransactionsDomain.UsersID)
 	if err != nil {
 		return &Domain{}, bussiness.ErrUsersIDNotFound
-	}
-
-	_, errs := uc.discountsUsecase.GetByID(ctx, TransactionsDomain.DiscountsID)
-	if errs != nil {
-		return &Domain{}, bussiness.ErrDiscountsIDNotFound
 	}
 
 	res, err := uc.transactionsRepository.Update(ctx, TransactionsDomain)

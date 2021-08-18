@@ -4,19 +4,22 @@ import (
 	"context"
 	"time"
 
+	transactionItem "consignku/bussiness/transactions_item"
+
 	"gorm.io/gorm"
 )
 
 type Domain struct {
-	ID           int
-	Price        int
-	UsersID      int
-	Usernames    string
-	DiscountsID  int
-	DiscountsVal int
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	DeletedAt    gorm.DeletedAt
+	ID               int
+	DiscountsID      int
+	UsersID          int
+	Usernames        string
+	ProductsID       int
+	ProductsPrice    int
+	TransactionItems []transactionItem.Domain
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
+	DeletedAt        gorm.DeletedAt
 }
 
 type Usecase interface {
@@ -24,7 +27,7 @@ type Usecase interface {
 	Store(ctx context.Context, TransactionsDomain *Domain) (Domain, error)
 	Update(ctx context.Context, TransactionsDomain *Domain) (*Domain, error)
 	Delete(ctx context.Context, ProductTypesDomain *Domain) (*Domain, error)
-	GetByID(ctx context.Context, id int) (Domain, error)
+	GetByID(ctx context.Context, id, userID int) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
 }
 
@@ -34,5 +37,5 @@ type Repository interface {
 	Store(ctx context.Context, TransactionsDomain *Domain) (Domain, error)
 	Update(ctx context.Context, TransactionsDomain *Domain) (Domain, error)
 	Delete(ctx context.Context, ProductTypesDomain *Domain) (Domain, error)
-	FindByID(id int) (Domain, error)
+	FindByID(id, userID int) (Domain, error)
 }

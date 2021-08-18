@@ -18,31 +18,31 @@ func NewMysqlProductsRepository(conn *gorm.DB) transactions.Repository {
 }
 
 func (nr *mysqlTransactionsRepository) Store(ctx context.Context, transactionsDomain *transactions.Domain) (transactions.Domain, error) {
-	rec := fromDomain(*transactionsDomain)
+	rec := FromDomain(*transactionsDomain)
 
 	result := nr.Conn.Create(&rec)
 	if result.Error != nil {
 		return transactions.Domain{}, result.Error
 	}
 
-	err := nr.Conn.Preload("Transactions").First(&rec, rec.ID).Error
+	err := nr.Conn.Debug().Preload("User").Preload("Products").Preload("TransactionsItems").Preload("TransactionsItems.Products").First(&rec, rec.ID).Error
 	if err != nil {
 		return transactions.Domain{}, result.Error
 	}
 
-	return rec.toDomain(), nil
+	return rec.ToDomain(), nil
 }
 
 func (nr *mysqlTransactionsRepository) Find(ctx context.Context, page, perpage int) ([]transactions.Domain, int, error) {
 	rec := []Transactions{}
 	offset := (page - 1) * perpage
 
-	err := nr.Conn.Joins("Users").Joins("Discounts").Find(&rec).Offset(offset).Limit(perpage).Error
+	err := nr.Conn.Preload("User").Preload("Products").Preload("TransactionsItem").Preload("TransactionsItem.Products").Find(&rec).Offset(offset).Limit(perpage).Error
 
 	if err != nil {
 		return []transactions.Domain{}, 0, err
 	}
-	count := nr.Conn.Joins("Users").Joins("Discounts").Find(&rec).Offset(offset).Limit(perpage).RowsAffected
+	count := nr.Conn.Preload("User").Preload("Products").Preload("TransactionsItem").Preload("TransactionsItem.Products").Find(&rec).Offset(offset).Limit(perpage).RowsAffected
 
 	if err != nil {
 		return []transactions.Domain{}, 0, err
@@ -50,7 +50,7 @@ func (nr *mysqlTransactionsRepository) Find(ctx context.Context, page, perpage i
 
 	var res []transactions.Domain
 	for _, value := range rec {
-		res = append(res, value.toDomain())
+		res = append(res, value.ToDomain())
 	}
 
 	return res, int(count), nil
@@ -59,26 +59,26 @@ func (nr *mysqlTransactionsRepository) Find(ctx context.Context, page, perpage i
 func (cr *mysqlTransactionsRepository) FindAll(ctx context.Context) ([]transactions.Domain, error) {
 	rec := []Transactions{}
 
-	cr.Conn.Joins("Users").Joins("Discounts").Find(&rec)
+	cr.Conn.Joins("Users").Find(&rec)
 	productUsedTimesDomain := []transactions.Domain{}
 	for _, value := range rec {
-		productUsedTimesDomain = append(productUsedTimesDomain, value.toDomain())
+		productUsedTimesDomain = append(productUsedTimesDomain, value.ToDomain())
 	}
 
 	return productUsedTimesDomain, nil
 }
 
-func (nr *mysqlTransactionsRepository) FindByID(id int) (transactions.Domain, error) {
+func (nr *mysqlTransactionsRepository) FindByID(id, userID int) (transactions.Domain, error) {
 	rec := Transactions{}
 
-	if err := nr.Conn.Joins("Users").Joins("Discounts").Where("transactions.id = ?", id).First(&rec).Error; err != nil {
+	if err := nr.Conn.Preload("Users").Preload("TransactionItems").Preload("TransactionItems.Products").Where("id = ?", id).Where("users_id = ?", userID).First(&rec).Error; err != nil {
 		return transactions.Domain{}, err
 	}
-	return rec.toDomain(), nil
+	return rec.ToDomain(), nil
 }
 
 func (nr *mysqlTransactionsRepository) Update(ctx context.Context, TransactionsDomain *transactions.Domain) (transactions.Domain, error) {
-	rec := fromDomain(*TransactionsDomain)
+	rec := FromDomain(*TransactionsDomain)
 
 	result := nr.Conn.Updates(rec)
 
@@ -91,12 +91,12 @@ func (nr *mysqlTransactionsRepository) Update(ctx context.Context, TransactionsD
 	if err != nil {
 		return transactions.Domain{}, result.Error
 	}
-	return rec.toDomain(), nil
+	return rec.ToDomain(), nil
 
 }
 
 func (nr *mysqlTransactionsRepository) Delete(ctx context.Context, TransactionsDomain *transactions.Domain) (transactions.Domain, error) {
-	rec := fromDomain(*TransactionsDomain)
+	rec := FromDomain(*TransactionsDomain)
 
 	result := nr.Conn.Delete(rec)
 
@@ -109,5 +109,5 @@ func (nr *mysqlTransactionsRepository) Delete(ctx context.Context, TransactionsD
 	if err != nil {
 		return transactions.Domain{}, result.Error
 	}
-	return rec.toDomain(), nil
+	return rec.ToDomain(), nil
 }

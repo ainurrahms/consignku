@@ -2,7 +2,8 @@ package transactions
 
 import (
 	TransactionsUsecase "consignku/bussiness/transactions"
-	"consignku/drivers/databases/discounts"
+	TransactionsItemDomain "consignku/bussiness/transactions_item"
+	"consignku/drivers/databases/transactions_item"
 	"consignku/drivers/databases/users"
 	"time"
 
@@ -10,38 +11,41 @@ import (
 )
 
 type Transactions struct {
-	ID          int
-	Price       int
-	UsersID     int
-	Users       users.Users `gorm:"foreignKey:UsersID;references:ID"`
-	DiscountsID int
-	Discounts   discounts.Discounts `gorm:"foreignKey:DiscountsID;references:Id"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   gorm.DeletedAt
+	ID               int
+	TransactionItems []transactions_item.TransactionsItem
+	UsersID          int
+	Users            users.Users `gorm:"foreignKey:UsersID;references:ID"`
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
+	DeletedAt        gorm.DeletedAt
 }
 
-func fromDomain(domain TransactionsUsecase.Domain) *Transactions {
+func FromDomain(domain TransactionsUsecase.Domain) *Transactions {
+	var items []transactions_item.TransactionsItem
+	for _, item := range domain.TransactionItems {
+		items = append(items, *transactions_item.FromDomain(&item))
+	}
 	return &Transactions{
-		ID:          domain.ID,
-		Price:       domain.Price,
-		UsersID:     domain.UsersID,
-		DiscountsID: domain.DiscountsID,
-		CreatedAt:   domain.CreatedAt,
-		UpdatedAt:   domain.UpdatedAt,
-		DeletedAt:   domain.DeletedAt,
+		ID:               domain.ID,
+		UsersID:          domain.UsersID,
+		TransactionItems: items,
+		CreatedAt:        domain.CreatedAt,
+		UpdatedAt:        domain.UpdatedAt,
+		DeletedAt:        domain.DeletedAt,
 	}
 }
-func (rec *Transactions) toDomain() TransactionsUsecase.Domain {
+func (rec *Transactions) ToDomain() TransactionsUsecase.Domain {
+	var items []TransactionsItemDomain.Domain
+	for _, item := range rec.TransactionItems {
+		items = append(items, item.ToDomain())
+	}
 	return TransactionsUsecase.Domain{
-		ID:           rec.ID,
-		Price:        rec.Price,
-		UsersID:      rec.UsersID,
-		Usernames:    rec.Users.Username,
-		DiscountsID:  rec.DiscountsID,
-		DiscountsVal: rec.Discounts.DiscountValue,
-		CreatedAt:    rec.CreatedAt,
-		UpdatedAt:    rec.UpdatedAt,
-		DeletedAt:    rec.DeletedAt,
+		ID:               rec.ID,
+		UsersID:          rec.UsersID,
+		Usernames:        rec.Users.Username,
+		TransactionItems: items,
+		CreatedAt:        rec.CreatedAt,
+		UpdatedAt:        rec.UpdatedAt,
+		DeletedAt:        rec.DeletedAt,
 	}
 }
