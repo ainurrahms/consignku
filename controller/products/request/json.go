@@ -10,6 +10,7 @@ type Products struct {
 	ProductTypesID     int    `json:"product_type_id"`
 	ProductUsedTimesID int    `json:"product_used_id"`
 	Garansi            bool   `json:"garansi"`
+	IDCity             int    `json:"id_city"`
 }
 
 func (req *Products) ToDomain() *products.Domain {
@@ -21,5 +22,6 @@ func (req *Products) ToDomain() *products.Domain {
 		ProductTypesID:     req.ProductTypesID,
 		ProductUsedTimesID: req.ProductUsedTimesID,
 		Garansi:            req.Garansi,
+		IDCity:             req.IDCity,
 	}
 }
