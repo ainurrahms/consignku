@@ -6,6 +6,7 @@ import (
 	productUsedTimesRepo "consignku/drivers/databases/product_used_times"
 	productsRepo "consignku/drivers/databases/products"
 	transactionsRepo "consignku/drivers/databases/transactions"
+	transactionsItemRepo "consignku/drivers/databases/transactions_item"
 	usersRepo "consignku/drivers/databases/users"
 	"fmt"
 	"log"
@@ -49,5 +50,6 @@ func Migrate(db *gorm.DB) {
 		&productUsedTimesRepo.ProductUsedTimes{},
 		&productsRepo.Products{},
 		&transactionsRepo.Transactions{},
+		&transactionsItemRepo.TransactionsItem{},
 	)
 }

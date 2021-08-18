@@ -8,7 +8,7 @@ import (
 )
 
 type Discounts struct {
-	Id            int            `json:"id"`
+	ID            int            `json:"id"`
 	Code          string         `json:"code"`
 	DiscountValue int            `json:"discount_value"`
 	CreatedAt     time.Time      `json:"created_at"`
@@ -18,7 +18,7 @@ type Discounts struct {
 
 func FromDomain(domain discounts.Domain) Discounts {
 	return Discounts{
-		Id:            domain.Id,
+		ID:            domain.ID,
 		Code:          domain.Code,
 		DiscountValue: domain.DiscountValue,
 		CreatedAt:     domain.CreatedAt,

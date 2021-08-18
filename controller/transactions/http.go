@@ -1,6 +1,7 @@
 package transactions
 
 import (
+	"consignku/app/middleware"
 	"consignku/bussiness/transactions"
 	"consignku/controller"
 	"consignku/controller/transactions/request"
@@ -31,12 +32,13 @@ func (ctrl *TransactionsController) Store(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	_, err := ctrl.transactionsUsecase.Store(ctx, req.ToDomain())
+	res, err := ctrl.transactionsUsecase.Store(ctx, req.ToDomain())
+
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controller.NewSuccessResponse(c, "Successfully inserted")
+	return controller.NewSuccessResponse(c, res)
 }
 
 func (ctrl *TransactionsController) Find(c echo.Context) error {
@@ -99,7 +101,9 @@ func (ctrl *TransactionsController) GetByID(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	transactions, err := ctrl.transactionsUsecase.GetByID(ctx, id)
+	userID := middleware.GetUser(c).ID
+
+	transactions, err := ctrl.transactionsUsecase.GetByID(ctx, id, userID)
 
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)

@@ -8,7 +8,7 @@ import (
 )
 
 type Discounts struct {
-	Id            int
+	ID            int
 	Code          string
 	DiscountValue int
 	CreatedAt     time.Time
@@ -18,7 +18,7 @@ type Discounts struct {
 
 func fromDomain(domain discountsUsecase.Domain) *Discounts {
 	return &Discounts{
-		Id:            domain.Id,
+		ID:            domain.ID,
 		Code:          domain.Code,
 		DiscountValue: domain.DiscountValue,
 		CreatedAt:     domain.CreatedAt,
@@ -29,7 +29,7 @@ func fromDomain(domain discountsUsecase.Domain) *Discounts {
 
 func (rec *Discounts) toDomain() discountsUsecase.Domain {
 	return discountsUsecase.Domain{
-		Id:            rec.Id,
+		ID:            rec.ID,
 		Code:          rec.Code,
 		DiscountValue: rec.DiscountValue,
 		CreatedAt:     rec.CreatedAt,

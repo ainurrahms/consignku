@@ -89,7 +89,7 @@ func main() {
 	productsCtrl := _productsController.NewProductsController(productsUsecase)
 
 	transactionsRepo := _transactionsRepo.NewMysqlProductsRepository(db)
-	transcationsUsecase := _transactionsUsecase.NewTransactionsUsecase(transactionsRepo, userUsecase, discountsUsecase, &configJWT, timeoutContext)
+	transcationsUsecase := _transactionsUsecase.NewTransactionsUsecase(transactionsRepo, userUsecase, discountsUsecase, productsUsecase, &configJWT, timeoutContext)
 	transcationsCtrl := _transactionsController.NewTransactionsController(transcationsUsecase)
 
 	routesInit := _routes.RouteLists{

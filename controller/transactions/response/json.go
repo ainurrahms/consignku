@@ -2,14 +2,15 @@ package response
 
 import (
 	"consignku/bussiness/transactions"
+	"consignku/controller/transactions_item/response"
 )
 
 type Transactions struct {
-	Price        int    `json:"price"`
-	UsersID      int    `json:"users_id"`
-	Usernames    string `json:"buyer_name"`
-	DiscountsID  int    `json:"discounts_id"`
-	DiscountsVal int    `json:"discounts_val"`
+	ID               int                         `json:"id"`
+	UsersID          int                         `json:"users_id"`
+	Usernames        string                      `json:"buyer_name"`
+	TotalPrice       int                         `json:"total_price"`
+	TransactionItems []response.TransactionsItem `json:"transaction_items"`
 }
 
 type Pagination struct {
@@ -20,11 +21,17 @@ type Pagination struct {
 }
 
 func FromDomain(domain transactions.Domain) Transactions {
+	var items []response.TransactionsItem
+	var totalPrice int
+	for _, item := range domain.TransactionItems {
+		items = append(items, response.FromDomain(item))
+		totalPrice = item.ProductsPrice - item.DiscountsVal
+	}
 	return Transactions{
-		Price:        domain.Price,
-		UsersID:      domain.UsersID,
-		Usernames:    domain.Usernames,
-		DiscountsID:  domain.DiscountsID,
-		DiscountsVal: domain.DiscountsVal,
+		ID:               domain.ID,
+		UsersID:          domain.UsersID,
+		Usernames:        domain.Usernames,
+		TotalPrice:       totalPrice,
+		TransactionItems: items,
 	}
 }

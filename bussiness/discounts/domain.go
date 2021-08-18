@@ -8,7 +8,7 @@ import (
 )
 
 type Domain struct {
-	Id            int
+	ID            int
 	Code          string
 	DiscountValue int
 	CreatedAt     time.Time
