@@ -13,6 +13,7 @@ import (
 	_discountsUsecase "consignku/bussiness/discounts"
 	_discountsController "consignku/controller/discounts"
 	_discountsRepo "consignku/drivers/databases/discounts"
+	_indonesiaCityLocation "consignku/drivers/databases/thirdparties/indonesia_city_location"
 
 	_productTypesUsecase "consignku/bussiness/product_types"
 	_productTypesController "consignku/controller/product_types"
@@ -29,6 +30,9 @@ import (
 	_transactionsUsecase "consignku/bussiness/transactions"
 	_transactionsController "consignku/controller/transactions"
 	_transactionsRepo "consignku/drivers/databases/transactions"
+
+	_indonesiaCityLocationUsecase "consignku/bussiness/indonesia_city_location"
+	_indonesiaCityLocationController "consignku/controller/indonesia_city_location"
 
 	_routes "consignku/app/routes"
 
@@ -68,8 +72,12 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 	e := echo.New()
 
+	indonesiaCityLocationRepo := _indonesiaCityLocation.NewIndonesiaCityLocation(db)
+	indonesiaCityLocationUsecase := _indonesiaCityLocationUsecase.NewIndonesiaCityLocationusecase(indonesiaCityLocationRepo, timeoutContext)
+	indonesiaCityLocationController := _indonesiaCityLocationController.NewIndonesiaCityController(indonesiaCityLocationUsecase)
+
 	userRepo := _userRepo.NewMySQLUserRepository(db)
-	userUsecase := _userUsecase.NewUserUseCase(userRepo, &configJWT, timeoutContext)
+	userUsecase := _userUsecase.NewUserUseCase(userRepo, &configJWT, indonesiaCityLocationRepo, timeoutContext)
 	userCtrl := _userController.NewUserController(userUsecase)
 
 	discountsRepo := _discountsRepo.NewMySQLDiscountsRepository(db)
@@ -93,13 +101,14 @@ func main() {
 	transcationsCtrl := _transactionsController.NewTransactionsController(transcationsUsecase)
 
 	routesInit := _routes.RouteLists{
-		JWTMiddleware:              configJWT.Init(),
-		UserController:             *userCtrl,
-		DiscountsController:        *dicountsCtrl,
-		ProductTypesController:     *productTypesCtrl,
-		ProductUsedTimesController: *productUsedTimesCtrl,
-		ProductsController:         *productsCtrl,
-		TransactionsController:     *transcationsCtrl,
+		JWTMiddleware:                   configJWT.Init(),
+		UserController:                  *userCtrl,
+		DiscountsController:             *dicountsCtrl,
+		ProductTypesController:          *productTypesCtrl,
+		ProductUsedTimesController:      *productUsedTimesCtrl,
+		ProductsController:              *productsCtrl,
+		TransactionsController:          *transcationsCtrl,
+		IndonesiaCityLocationController: *indonesiaCityLocationController,
 	}
 
 	routesInit.RouteRegister(e)

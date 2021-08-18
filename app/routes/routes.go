@@ -2,6 +2,7 @@ package routes
 
 import (
 	"consignku/controller/discounts"
+	"consignku/controller/indonesia_city_location"
 	"consignku/controller/product_types"
 	"consignku/controller/product_used_times"
 	"consignku/controller/products"
@@ -13,13 +14,14 @@ import (
 )
 
 type RouteLists struct {
-	JWTMiddleware              middleware.JWTConfig
-	UserController             users.UserController
-	DiscountsController        discounts.DiscountsController
-	ProductsController         products.ProductsController
-	ProductTypesController     product_types.ProductTypesController
-	ProductUsedTimesController product_used_times.ProductUsedTimesController
-	TransactionsController     transactions.TransactionsController
+	JWTMiddleware                   middleware.JWTConfig
+	UserController                  users.UserController
+	DiscountsController             discounts.DiscountsController
+	ProductsController              products.ProductsController
+	ProductTypesController          product_types.ProductTypesController
+	ProductUsedTimesController      product_used_times.ProductUsedTimesController
+	TransactionsController          transactions.TransactionsController
+	IndonesiaCityLocationController indonesia_city_location.IndonesiaCityLocationController
 }
 
 func (r *RouteLists) RouteRegister(e *echo.Echo) {
@@ -70,4 +72,8 @@ func (r *RouteLists) RouteRegister(e *echo.Echo) {
 	transactionsTimes.GET("/id/:id", r.TransactionsController.GetByID, middleware.JWTWithConfig(r.JWTMiddleware))
 	transactionsTimes.PUT("/update/:id", r.TransactionsController.Update, middleware.JWTWithConfig(r.JWTMiddleware))
 	transactionsTimes.DELETE("/delete/:id", r.TransactionsController.Delete, middleware.JWTWithConfig(r.JWTMiddleware))
+
+	cityTimes := e.Group("v1/api/city")
+	cityTimes.POST("/create", r.IndonesiaCityLocationController.Store)
+
 }

@@ -20,6 +20,7 @@ type Products struct {
 	ProductUsedTimesID int
 	ProductUsedTimes   product_used_times.ProductUsedTimes `gorm:"foreignKey:ProductUsedTimesID;references:Id"`
 	Garansi            bool
+	IDCity             int
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 	DeletedAt          gorm.DeletedAt
@@ -35,6 +36,7 @@ func fromDomain(domain ProductsUsecase.Domain) *Products {
 		ProductTypesID:     domain.ProductTypesID,
 		ProductUsedTimesID: domain.ProductUsedTimesID,
 		Garansi:            domain.Garansi,
+		IDCity:             domain.IDCity,
 		CreatedAt:          domain.CreatedAt,
 		UpdatedAt:          domain.UpdatedAt,
 		DeletedAt:          domain.DeletedAt,
@@ -55,6 +57,7 @@ func (rec *Products) toDomain() ProductsUsecase.Domain {
 		ProductUsedTimesID: rec.ProductUsedTimesID,
 		ProductsUsedTimes:  rec.ProductUsedTimes.UsedTimes,
 		Garansi:            rec.Garansi,
+		IDCity:             rec.IDCity,
 		CreatedAt:          rec.CreatedAt,
 		UpdatedAt:          rec.UpdatedAt,
 		DeletedAt:          rec.DeletedAt,
