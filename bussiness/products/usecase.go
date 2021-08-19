@@ -25,21 +25,21 @@ func NewProductsUsecase(nr Repository, pt product_types.Usecase, pu product_used
 	}
 }
 
-func (uc *productsUsecase) Store(ctx context.Context, ProductTypesDomain *Domain) (Domain, error) {
+func (uc *productsUsecase) Store(ctx context.Context, ProductsDomain *Domain) (Domain, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductTypesID)
+	_, err := uc.productTypesUsecase.GetByID(ctx, ProductsDomain.ProductTypesID)
 	if err != nil {
 		return Domain{}, bussiness.ErrProductsTypeIDNotFound
 	}
 
-	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductUsedTimesID)
+	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductsDomain.ProductUsedTimesID)
 	if errs != nil {
 		return Domain{}, bussiness.ErrProductsUsedTimesIDNotFound
 	}
 
-	result, err := uc.productsRepository.Store(ctx, ProductTypesDomain)
+	result, err := uc.productsRepository.Store(ctx, ProductsDomain)
 	if err != nil {
 		return Domain{}, err
 	}
@@ -72,17 +72,17 @@ func (uc *productsUsecase) Find(ctx context.Context, page, perpage int) ([]Domai
 	return res, count, lastPage, nil
 }
 
-func (uc *productsUsecase) Update(ctx context.Context, ProductTypesDomain *Domain) (*Domain, error) {
-	_, err := uc.productTypesUsecase.GetByID(ctx, ProductTypesDomain.ProductTypesID)
+func (uc *productsUsecase) Update(ctx context.Context, ProductsDomain *Domain) (*Domain, error) {
+	_, err := uc.productTypesUsecase.GetByID(ctx, ProductsDomain.ProductTypesID)
 	if err != nil {
 		return &Domain{}, bussiness.ErrProductsTypeIDNotFound
 	}
 
-	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductTypesDomain.ProductUsedTimesID)
+	_, errs := uc.productUsedTimesUsecase.GetByID(ctx, ProductsDomain.ProductUsedTimesID)
 	if errs != nil {
 		return &Domain{}, bussiness.ErrProductsUsedTimesIDNotFound
 	}
-	res, err := uc.productsRepository.Update(ctx, ProductTypesDomain)
+	res, err := uc.productsRepository.Update(ctx, ProductsDomain)
 
 	if err != nil {
 		return &Domain{}, err

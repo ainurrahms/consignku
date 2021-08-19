@@ -28,7 +28,7 @@ type Usecase interface {
 type Repository interface {
 	// Fetch(ctx context.Context, page, perpage int) ([]Domain, int, error)
 	Find(ctx context.Context) ([]Domain, error)
-	FindByID(id int) (Domain, error)
+	FindByID(ctx context.Context, id int) (Domain, error)
 	Update(ctx context.Context, discountsDomain *Domain) (Domain, error)
 	Delete(ctx context.Context, discountsDomain *Domain) (Domain, error)
 	Store(ctx context.Context, discountsDomain *Domain) error

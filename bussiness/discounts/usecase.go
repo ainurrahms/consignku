@@ -65,7 +65,7 @@ func (uc *discountsUsecase) GetByID(ctx context.Context, id int) (Domain, error)
 		return Domain{}, bussiness.ErrIDNotFound
 	}
 
-	resp, err := uc.discountsRepository.FindByID(id)
+	resp, err := uc.discountsRepository.FindByID(ctx, id)
 
 	if err != nil {
 		return Domain{}, err

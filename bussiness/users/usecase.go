@@ -23,12 +23,12 @@ func NewUserUseCase(ur Repository, jwtauth *middleware.ConfigJWT, ic indonesia_c
 	return &userUsecase{
 		userRepository:        ur,
 		jwtAuth:               jwtauth,
-		contextTimeout:        timeout,
 		IndonesiaCityLocation: ic,
+		contextTimeout:        timeout,
 	}
 }
 
-func (uc *userUsecase) Register(ctx context.Context, userDomain *Domain) (Domain, error) {
+func (uc *userUsecase) Register(ctx context.Context, userDomain *Domain) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
@@ -36,7 +36,7 @@ func (uc *userUsecase) Register(ctx context.Context, userDomain *Domain) (Domain
 
 	if err != nil {
 		if !strings.Contains(err.Error(), "not found") {
-			return Domain{}, err
+			return err
 		}
 	}
 
@@ -52,22 +52,22 @@ func (uc *userUsecase) Register(ctx context.Context, userDomain *Domain) (Domain
 	userDomain.CityName = string(jsonMarshal)
 
 	if existedUser != (Domain{}) {
-		return Domain{}, bussiness.ErrDuplicateData
+		return bussiness.ErrDuplicateData
 	}
 
 	userDomain.Password, err = encrypt.Hash(userDomain.Password)
 
 	if err != nil {
-		return Domain{}, bussiness.ErrInternalServer
+		return bussiness.ErrInternalServer
 	}
 
-	result, err := uc.userRepository.Store(ctx, userDomain)
+	err = uc.userRepository.Store(ctx, userDomain)
 
 	if err != nil {
-		return Domain{}, err
+		return err
 	}
 
-	return result, nil
+	return nil
 }
 
 func (uc *userUsecase) Login(ctx context.Context, username, password string) (string, error) {
