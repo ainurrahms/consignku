@@ -28,7 +28,7 @@ func (ctrl *UserController) Register(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	_, err := ctrl.userUsecase.Register(ctx, req.ToDomain())
+	err := ctrl.userUsecase.Register(ctx, req.ToDomain())
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

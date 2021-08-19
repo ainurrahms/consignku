@@ -63,7 +63,7 @@ func (cr *mysqlDiscountsRepository) Find(ctx context.Context) ([]discounts.Domai
 	return discoutnsDomain, nil
 }
 
-func (nr *mysqlDiscountsRepository) FindByID(id int) (discounts.Domain, error) {
+func (nr *mysqlDiscountsRepository) FindByID(ctx context.Context, id int) (discounts.Domain, error) {
 	rec := Discounts{}
 
 	if err := nr.Conn.Where("id = ?", id).First(&rec).Error; err != nil {
